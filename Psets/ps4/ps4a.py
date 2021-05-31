@@ -30,6 +30,7 @@ def get_permutations(sequence):
         new_permutations = []
         ## Performing this function for each item in the list
         for p in get_permutations(sequence[1:]):
+            ## Iterating over each character in a element
             for i in range(len(p) + 1):
                 new_permutations.append(p[ : i] + letter_to_add + p[i:])
         return(new_permutations)

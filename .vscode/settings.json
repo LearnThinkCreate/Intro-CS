@@ -1,10 +1,9 @@
 {
-    "python.pythonPath": "/opt/homebrew/Caskroom/miniforge/base/bin/python",
     "[json]": {
     
         "editor.quickSuggestions": {
             "strings": true
         },
-        "editor.suggest.insertMode": "replace"
+        "editor.suggest.insertMode": "replace" ,
     }
-}
+  }

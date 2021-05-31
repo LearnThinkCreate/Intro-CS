@@ -2,7 +2,6 @@
 # Name: <your name here>
 # Collaborators:
 # Time Spent: x:xx
-
 import string
 from ps4a import get_permutations
 
@@ -25,7 +24,7 @@ def load_words(file_name):
     wordlist = []
     for line in inFile:
         wordlist.extend([word.lower() for word in line.split(' ')])
-    print("  ", len(wordlist), "words loaded.")
+    #print("  ", len(wordlist), "words loaded.")
     return wordlist
 
 def is_word(word_list, word):
@@ -70,7 +69,8 @@ class SubMessage(object):
             self.message_text (string, determined by input text)
             self.valid_words (list, determined using helper function load_words)
         '''
-        pass #delete this line and replace with your code here
+        self.message_text = text
+        self.valid_words = load_words('words.txt')
     
     def get_message_text(self):
         '''
@@ -78,7 +78,7 @@ class SubMessage(object):
         
         Returns: self.message_text
         '''
-        pass #delete this line and replace with your code here
+        return self.message_text
 
     def get_valid_words(self):
         '''
@@ -87,7 +87,7 @@ class SubMessage(object):
         
         Returns: a COPY of self.valid_words
         '''
-        pass #delete this line and replace with your code here
+        return self.valid_words[:]
                 
     def build_transpose_dict(self, vowels_permutation):
         '''
@@ -108,8 +108,17 @@ class SubMessage(object):
         Returns: a dictionary mapping a letter (string) to 
                  another letter (string). 
         '''
-        
-        pass #delete this line and replace with your code here
+
+        ## Intializing the shift dictionary 
+        shift_dict = {}
+        for letter in range(len(VOWELS_LOWER)):
+            ## assigning the key to the letter (both uper and lower case) and applying the shift 
+            shift_dict[VOWELS_LOWER[letter] ] = vowels_permutation[letter].lower()
+            shift_dict[VOWELS_UPPER[letter] ] = vowels_permutation[letter].upper()
+        for letter in CONSONANTS_LOWER:
+            shift_dict[letter] = letter
+            shift_dict[letter.upper()] = letter.upper()
+        return shift_dict
     
     def apply_transpose(self, transpose_dict):
         '''
@@ -118,8 +127,16 @@ class SubMessage(object):
         Returns: an encrypted version of the message text, based 
         on the dictionary
         '''
-        
-        pass #delete this line and replace with your code here
+        ## Empty str that will contain the encyprted message
+        shifted_str = ''
+        ## Iterating over each char, if it's a letter applying shift_dict, else I'm just appending to string 
+        for char in self.message_text:
+            if char in transpose_dict.keys():
+                shifted_str += transpose_dict[char]
+            else:
+                shifted_str += char
+        return shifted_str
+
         
 class EncryptedSubMessage(SubMessage):
     def __init__(self, text):
@@ -132,7 +149,7 @@ class EncryptedSubMessage(SubMessage):
             self.message_text (string, determined by input text)
             self.valid_words (list, determined using helper function load_words)
         '''
-        pass #delete this line and replace with your code here
+        SubMessage.__init__(self, text)
 
     def decrypt_message(self):
         '''
@@ -152,7 +169,29 @@ class EncryptedSubMessage(SubMessage):
         
         Hint: use your function from Part 4A
         '''
-        pass #delete this line and replace with your code here
+        word_list = self.get_valid_words()
+
+        max_words = 0
+        decrypted_message = self.get_message_text()
+
+        permutations = get_permutations(VOWELS_LOWER)
+
+        ## Iterating over each permutation
+        for perm in permutations:
+            ## If the max number of valid words is equivalnant to the number of possible words in the message, I'm happy 
+            if max_words == len(self.get_message_text().split()):
+                break
+            num_words = 0 
+            new_message = self.apply_transpose(self.build_transpose_dict(perm))
+
+            for words in new_message.split():
+                if is_word(word_list , words):
+                    num_words += 1
+
+            if num_words > max_words:
+                max_words = num_words
+                decrypted_message = new_message
+        return decrypted_message
     
 
 if __name__ == '__main__':
@@ -168,3 +207,11 @@ if __name__ == '__main__':
     print("Decrypted message:", enc_message.decrypt_message())
      
     #TODO: WRITE YOUR TEST CASES HERE
+    message = SubMessage("Bitcoin will take over the whole world")
+    permutation = "eaiuo"
+    enc_dict = message.build_transpose_dict(permutation)
+    print("Original message:", message.get_message_text(), "Permutation:", permutation)
+    print("Expected encryption:", "Hallu Wurld!")
+    print("Actual encryption:", message.apply_transpose(enc_dict))
+    enc_message = EncryptedSubMessage(message.apply_transpose(enc_dict))
+    print("Decrypted message:", enc_message.decrypt_message())
