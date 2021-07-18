@@ -130,6 +130,7 @@ ACCEPTABLE_URI_SCHEMES = (
 #ACCEPTABLE_URI_SCHEMES = ()
 
 # ---------- required modules (should come with any Python distribution) ----------
+import requests
 import cgi
 import codecs
 import copy

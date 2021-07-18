@@ -1,9 +1,18 @@
 # 6.00
+# Changing dir to Problem Set 5 folder
+
 # Problem Set 5 Test Suite
+# import os
+try:
+    import os
+    path = os.getcwd() + '/Psets/ps5'
+    os.chdir(path)
+except:
+    pass
+
 import unittest
 from ps5 import *
 from datetime import timedelta
-
 
 class ProblemSet5NewsStory(unittest.TestCase):
     def setUp(self):
@@ -245,8 +254,8 @@ class ProblemSet5(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(ProblemSet5NewsStory))
-    suite.addTest(unittest.makeSuite(ProblemSet5))
-    unittest.TextTestRunner(verbosity=2).run(suite)
+        suite = unittest.TestSuite()
+        suite.addTest(unittest.makeSuite(ProblemSet5NewsStory))
+        suite.addTest(unittest.makeSuite(ProblemSet5))
+        unittest.TextTestRunner(verbosity=2).run(suite)
 

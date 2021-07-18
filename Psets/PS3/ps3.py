@@ -470,7 +470,6 @@ def play_game(word_list):
 
     print("-----------------------------")
     return total_score
-    
 
 
 #
